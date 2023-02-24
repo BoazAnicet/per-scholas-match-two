@@ -3,9 +3,9 @@ const board = document.getElementById("board");
 let arr = [];
 let score = 0;
 
-resetCards = () => {
-  arr = [];
-};
+// resetCards = () => {
+//   arr = [];
+// };
 
 const addToArr = (item) => {
   console.log("Clicked item", arr[item]);
@@ -26,7 +26,7 @@ const addToArr = (item) => {
   console.log(arr);
 };
 
-const cards = document.querySelectorAll(".flip-card");
+// const cards = document.querySelectorAll(".flip-card");
 
 // cards.forEach((card) =>
 //   card.addEventListener("click", () => {
@@ -57,36 +57,6 @@ const stuff = (iter) => {
   }
 };
 
-// let cardArr = [1, 1, 2, 2, 3, 3];
-// for (let i = 0; i < cards.length; i++) {
-//   cards[i].addEventListener("click", () => {
-//     cards[i].children[0].classList.add("rotate");
-//     console.log(cards[i]);
-
-//     // if (arr.length === 0) {
-//     //   arr.push(cardArr[i]);
-//     //   // clickedCards.push(cards[i]) //
-//     // } else if (arr.length === 1) {
-//     //   arr.push(cardArr[i]);
-//     //   if (arr[0] === arr[1]) {
-//     //     // Keep cards from flipping
-//     //     resetCards();
-//     //     score++;
-//     //     console.log("Correct");
-//     //   } else {
-//     //     console.log("Incorrect");
-//     //     resetCards();
-//     //   }
-//     // }
-//     cards[i].removeEventListener("click", () => {});
-//   });
-// }
-
-// Array of correct cards flipped.
-const correctCards = [];
-//
-const clickedCards = [];
-
 // for (let i = 0; i < cardArr.length; i++) {
 //   let card = Object.assign(document.createElement("button"), {
 //     onclick: () => addToArr(cardArr[i]),
@@ -95,10 +65,11 @@ const clickedCards = [];
 //   board.append(card);
 // }
 
-const createCard = () => {
+const createCard = (index, value) => {
   // Outer container
   const flipCard = Object.assign(document.createElement("div"), {
     className: "flip-card",
+    onclick: () => rotate(index, value),
   });
   // Inner container
   const flipCardInner = Object.assign(document.createElement("div"), {
@@ -114,16 +85,49 @@ const createCard = () => {
     className: "flip-card-back",
     innerHTML: "B",
   });
-
+  // Append front and back
   flipCardInner.append(flipCardFront);
   flipCardInner.append(flipCardBack);
-
+  // Append inner
   flipCard.append(flipCardInner);
+  //  return card
   return flipCard;
 };
-
-// const board = document.getElementById('board')
+// Card values
+const cardsArray = [1, 1, 2, 2, 3, 3];
 
 for (let i = 0; i < 6; i++) {
-  board.append(createCard());
+  board.append(createCard(i, cardsArray[i]));
 }
+
+const cards = document.querySelectorAll(".flip-card");
+
+// Array of correct cards flipped.
+let correctCards = [];
+//
+let clickedCards = [];
+
+const rotate = (card, value) => {
+  cards[card].children[0].classList.add("rotate");
+  clickedCards.push({ card, value });
+  // console.log(cards, "cards");
+  console.log(clickedCards);
+  if (clickedCards.length == 2) {
+    if (clickedCards[0].value === clickedCards[1].value) {
+      console.log("Correct");
+      clickedCards = [];
+    } else {
+      resetCards();
+    }
+  }
+};
+
+const resetCards = () => {
+  setTimeout(() => {
+    for (let i = 0; i < clickedCards.length; i++) {
+      cards[clickedCards[i].card].children[0].classList.remove("rotate");
+    }
+    clickedCards = [];
+  }, 500);
+  console.log(clickedCards);
+};
