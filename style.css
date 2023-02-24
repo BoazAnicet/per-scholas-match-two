@@ -56,9 +56,17 @@ body {
   color: black;
 }
 .flip-card .flip-card-inner .flip-card-back {
-  background-color: dodgerblue;
   color: white;
   transform: rotateY(180deg);
+  background-color: coral;
+  padding: 1rem;
+}
+.flip-card .flip-card-inner .flip-card-back img {
+  width: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  -o-object-position: center;
+     object-position: center;
 }
 
 .rotate {

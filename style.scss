@@ -68,9 +68,16 @@ body {
 
     /* Style the back side */
     & .flip-card-back {
-      background-color: dodgerblue;
+      // background-color: dodgerblue;
       color: white;
       transform: rotateY(180deg);
+      background-color: coral;
+      padding: 1rem;
+      & img {
+        width: 100%;
+        object-fit: cover;
+        object-position: center;
+      }
     }
   }
 }
