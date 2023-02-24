@@ -115,17 +115,23 @@ const cardsList = document.querySelectorAll(".flip-card");
 let clickedCards = [];
 
 const rotate = (index, value) => {
+  if (clickedCards.length === 2) {
+    if (clickedCards[0].value !== clickedCards[1].value) {
+      resetCards();
+    }
+  }
   cardsList[index].children[0].classList.add("rotate");
   cardsList[index].onclick = () => {};
   clickedCards.push({ index, value });
-  console.log(clickedCards);
+  // console.log(clickedCards);
   if (clickedCards.length == 2) {
     if (clickedCards[0].value === clickedCards[1].value) {
-      console.log("Correct");
+      // console.log("Correct");
       clickedCards = [];
-    } else {
-      resetCards();
     }
+    //  else {
+    // resetCards();
+    // }
   }
 };
 // const rotate = (card, value) => {
@@ -144,15 +150,15 @@ const rotate = (index, value) => {
 // };
 
 const resetCards = () => {
-  setTimeout(() => {
-    for (let i = 0; i < clickedCards.length; i++) {
-      cardsList[clickedCards[i].index].children[0].classList.remove("rotate");
-      let index = clickedCards[i].index;
-      let value = clickedCards[i].value;
-      cardsList[clickedCards[i].index].onclick = () => rotate(index, value);
-    }
-    clickedCards = [];
-  }, 500);
+  // setTimeout(() => {
+  for (let i = 0; i < clickedCards.length; i++) {
+    cardsList[clickedCards[i].index].children[0].classList.remove("rotate");
+    let index = clickedCards[i].index;
+    let value = clickedCards[i].value;
+    cardsList[clickedCards[i].index].onclick = () => rotate(index, value);
+  }
+  clickedCards = [];
+  // }, 500);
 };
 // const resetCards = () => {
 //   setTimeout(() => {
