@@ -45,6 +45,11 @@ body {
   -webkit-backface-visibility: hidden; /* Safari */
   backface-visibility: hidden;
   border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-position: center;
+  background-size: cover;
 }
 .flip-card .flip-card-inner .flip-card-front {
   background-color: #bbb;

@@ -51,6 +51,13 @@ body {
       -webkit-backface-visibility: hidden; /* Safari */
       backface-visibility: hidden;
       border-radius: 10px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background-position: center;
+      background-size: cover;
     }
 
     /* Style the front side (fallback if image is missing) */
