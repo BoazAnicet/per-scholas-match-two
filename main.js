@@ -6,15 +6,12 @@ let game_mode = "solo";
 let canClickCards = true;
 let grid = { length: 4, width: 3 };
 let cardsList;
-// let player_one_score = Object.assign(document.createElement("div"), {
-//   className: "player-info",
-//   innerHTML: `<h2>Player 1</h2><div>Pairs: ${player_one_pairs}</div>`,
-// });
-// let player_two_score = Object.assign(document.createElement("div"), {
-//   className: "player-info",
-//   innerHTML: `<h2>Player 2</h2><div>Pairs: ${player_two_pairs}</div>`,
-// });
-let info = document.getElementById("info");
+const info = document.getElementById("info");
+let whosTurn = "one";
+const board = document.getElementById("board");
+let cardsArray = [];
+let clickedCards = [];
+let correctPairs = 0;
 
 const updateMoves = () => {
   moves++;
@@ -44,6 +41,7 @@ const createTwoPlayerDiv = () => {
   const playerOne = Object.assign(document.createElement("div"), {
     className: "player-one",
   });
+  whosTurn === "one" ? playerOne.classList.add("turn") : () => {};
   const playerOneTitle = Object.assign(document.createElement("h2"), {
     innerHTML: "Player 1",
   });
@@ -54,6 +52,7 @@ const createTwoPlayerDiv = () => {
   const playerTwo = Object.assign(document.createElement("div"), {
     className: "player-two",
   });
+  whosTurn === "two" ? playerTwo.classList.add("turn") : () => {};
   const playerTwoTitle = Object.assign(document.createElement("h2"), {
     innerHTML: "Player 1",
   });
@@ -74,6 +73,7 @@ const createTwoPlayerDiv = () => {
 };
 
 const changeGameMode = (mode) => {
+  resetGame();
   info.innerHTML = "";
   switch (mode) {
     case "solo":
@@ -82,7 +82,6 @@ const changeGameMode = (mode) => {
       break;
     case "two":
       game_mode = "two";
-      // resetGame();
       info.append(createTwoPlayerDiv());
       break;
     default:
@@ -172,21 +171,20 @@ const shuffleArray = (array) => {
 
 const resetGame = () => {
   board.innerHTML = "";
+  info.innerHTML = "";
   cardsArray = [];
   renderCards();
   cardsList = document.querySelectorAll(".flip-card");
   moves = 0;
+  correctPairs = 0;
+  whosTurn = "one";
+  clickedCards = [];
 
-  // let
-
-  info.innerHTML = "";
   if (game_mode === "solo") {
     info.append(createSoloPlayerDiv());
   } else if (game_mode === "two") {
     info.append(createTwoPlayerDiv());
   }
-
-  // document.getElementById("info").innerHTML = `Moves: ${moves}`;
 };
 
 const setGrid = (length, width) => {
@@ -197,15 +195,13 @@ const setGrid = (length, width) => {
   board.style = `grid-template-columns: repeat(${length}, 100px); grid-template-rows: repeat(${width}, 100px);`;
   resetGame();
 };
-const board = document.getElementById("board");
-// setGrid(grid.length, grid.width);
 
 //////////////////
 
 // Card values
-let cardsArray = [];
 const renderCards = () => {
-  for (let i = 0; i < decks[0].deck.length - 4; i++) {
+  for (let i = 0; i < 8; i++) {
+    // for (let i = 0; i < decks[0].deck.length - 4; i++) {
     cardsArray.push(i);
     cardsArray.push(i);
   }
@@ -223,17 +219,21 @@ renderCards();
 
 cardsList = document.querySelectorAll(".flip-card");
 
-// Array of correct cards flipped.
-// let correctCards = [];
-//
-let clickedCards = [];
-
 const rotate = (index, value) => {
   if (clickedCards.length === 2) {
     if (clickedCards[0].value !== clickedCards[1].value) {
       resetCards();
-      if (game_mode === "one") {
+      if (game_mode === "solo") {
         updateMoves();
+      }
+      if (game_mode === "two") {
+        if (whosTurn === "one") {
+          whosTurn = "two";
+          console.log(whosTurn);
+        } else if (whosTurn === "two") {
+          whosTurn = "one";
+          console.log(whosTurn);
+        }
       }
     }
   }
@@ -244,8 +244,14 @@ const rotate = (index, value) => {
     // Both flipped cards match
     if (clickedCards[0].value === clickedCards[1].value) {
       clickedCards = [];
-      if (game_mode === "one") {
+      if (game_mode === "solo") {
         updateMoves();
+        correctPairs++;
+        if (correctPairs === 8) {
+          setTimeout(() => {
+            alert(`You win with ${moves} moves!`);
+          }, 500);
+        }
       }
     }
   }

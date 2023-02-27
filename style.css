@@ -45,6 +45,9 @@ button:hover {
   text-align: center;
   justify-content: space-around;
 }
+#game #info .two-player > .turn {
+  background-color: green;
+}
 #game #board {
   background-color: #333;
   padding: 0.5rem;

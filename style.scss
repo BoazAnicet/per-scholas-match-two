@@ -16,6 +16,7 @@ button {
   background-color: cornflowerblue;
   color: #fff;
   border-radius: 5px;
+
   &:hover {
     cursor: pointer;
   }
@@ -52,6 +53,10 @@ button {
       text-align: center;
       // width: 49%;
       justify-content: space-around;
+
+      & > .turn {
+        background-color: green;
+      }
     }
   }
 
