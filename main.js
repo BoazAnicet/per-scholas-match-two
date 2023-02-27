@@ -1,9 +1,16 @@
-const board = document.getElementById("board");
-
 let arr = [];
-let score = 0;
-
+let player_one_score = 0;
+let player_two_score = 0;
+let moves = 0;
+const updateMoves = () => {
+  moves++;
+  document.getElementById("moves").innerHTML = `Moves: ${moves}`;
+};
+let game_mode = "one";
 let canClickCards = true;
+let grid = { length: 4, width: 3 };
+
+let cardsList;
 
 const cardBacks = [
   "/images/card-backs/endless-constellation.svg",
@@ -74,18 +81,6 @@ const createCard = (index, value, image) => {
   //  return card
   return flipCard;
 };
-// Card values
-// let cardsArray = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9];
-
-let cardsArray = [];
-for (let i = 0; i < decks[0].deck.length - 4; i++) {
-  // index, value
-  cardsArray.push(i);
-  cardsArray.push(i);
-  // cardsArray.push(decks[0].deck[i]);
-  // cardsArray.push(decks[0].deck[i]);
-  // cardsArray.push(i);
-}
 
 // The Fisher-Yates algorithm
 const shuffleArray = (array) => {
@@ -97,17 +92,48 @@ const shuffleArray = (array) => {
   }
 };
 
-shuffleArray(cardsArray);
+const resetGame = () => {
+  board.innerHTML = "";
+  cardsArray = [];
+  renderCards();
+  cardsList = document.querySelectorAll(".flip-card");
+  moves = 0;
+  document.getElementById("moves").innerHTML = `Moves: ${moves}`;
+};
 
-for (let i = 0; i < cardsArray.length; i++) {
-  board.append(
-    createCard(i, cardsArray[i], decks[0].deck[cardsArray[i]].image)
-  );
-  // board.append(createCard(i, cardsArray[i]));
-  // board.append(createCard(i, cardsArray[i]) );
-}
+const setGrid = (length, width) => {
+  grid.length = length;
+  grid.width = width;
+  // board.style = `grid-template-columns: repeat(${4}, 1fr); grid-template-rows: repeat(${3}, 1fr);`;
+  // board.style = `grid-template-columns: repeat(${length}, 1fr);`;
+  board.style = `grid-template-columns: repeat(${length}, 100px); grid-template-rows: repeat(${width}, 100px);`;
+  resetGame();
+};
+const board = document.getElementById("board");
+// setGrid(grid.length, grid.width);
 
-const cardsList = document.querySelectorAll(".flip-card");
+//////////////////
+
+// Card values
+let cardsArray = [];
+const renderCards = () => {
+  for (let i = 0; i < decks[0].deck.length - 4; i++) {
+    cardsArray.push(i);
+    cardsArray.push(i);
+  }
+
+  shuffleArray(cardsArray);
+
+  for (let i = 0; i < cardsArray.length; i++) {
+    board.append(
+      createCard(i, cardsArray[i], decks[0].deck[cardsArray[i]].image)
+    );
+  }
+};
+
+renderCards();
+
+cardsList = document.querySelectorAll(".flip-card");
 
 // Array of correct cards flipped.
 // let correctCards = [];
@@ -118,39 +144,26 @@ const rotate = (index, value) => {
   if (clickedCards.length === 2) {
     if (clickedCards[0].value !== clickedCards[1].value) {
       resetCards();
+      if (game_mode === "one") {
+        updateMoves();
+      }
     }
   }
   cardsList[index].children[0].classList.add("rotate");
   cardsList[index].onclick = () => {};
   clickedCards.push({ index, value });
-  // console.log(clickedCards);
   if (clickedCards.length == 2) {
+    // Both flipped cards match
     if (clickedCards[0].value === clickedCards[1].value) {
-      // console.log("Correct");
       clickedCards = [];
+      if (game_mode === "one") {
+        updateMoves();
+      }
     }
-    //  else {
-    // resetCards();
-    // }
   }
 };
-// const rotate = (card, value) => {
-//   cardsList[card].children[0].classList.add("rotate");
-//   cardsList[card].onclick = () => {};
-//   clickedCards.push({ card, value });
-//   console.log(clickedCards);
-//   if (clickedCards.length == 2) {
-//     if (clickedCards[0].value === clickedCards[1].value) {
-//       console.log("Correct");
-//       clickedCards = [];
-//     } else {
-//       resetCards();
-//     }
-//   }
-// };
 
 const resetCards = () => {
-  // setTimeout(() => {
   for (let i = 0; i < clickedCards.length; i++) {
     cardsList[clickedCards[i].index].children[0].classList.remove("rotate");
     let index = clickedCards[i].index;
@@ -158,18 +171,4 @@ const resetCards = () => {
     cardsList[clickedCards[i].index].onclick = () => rotate(index, value);
   }
   clickedCards = [];
-  // }, 500);
 };
-// const resetCards = () => {
-//   setTimeout(() => {
-//     for (let i = 0; i < clickedCards.length; i++) {
-//       cardsList[clickedCards[i].card].children[0].classList.remove("rotate");
-//       let card = clickedCards[i].card;
-//       let value = clickedCards[i].value;
-//       cardsList[clickedCards[i].card].onclick = () => rotate(card, value);
-//     }
-//     clickedCards = [];
-//   }, 500);
-// };
-
-const resetGame = () => {};

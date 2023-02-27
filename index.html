@@ -9,8 +9,23 @@
   </head>
   <body>
     <main>
-      <div id="board"></div>
-      <button onclick="resetCards()">Reset Cards</button>
+      <div id="game">
+        <div id="info">
+          <div id="moves">Moves: 0</div>
+        </div>
+        <div id="board"></div>
+        <div id="level">
+          <div>Level:</div>
+          <div class="buttons">
+            <button onclick="setGrid(4,3)">4x3</button>
+            <button onclick="setGrid(4,4)">4x4</button>
+            <button onclick="setGrid(5,4)">5x4</button>
+          </div>
+        </div>
+        <div>
+          <button onclick="resetGame()">Reset Game</button>
+        </div>
+      </div>
     </main>
     <script src="main.js"></script>
   </body>
