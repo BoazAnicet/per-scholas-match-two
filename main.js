@@ -54,7 +54,7 @@ const createTwoPlayerDiv = () => {
   });
   whosTurn === "two" ? playerTwo.classList.add("turn") : () => {};
   const playerTwoTitle = Object.assign(document.createElement("h2"), {
-    innerHTML: "Player 1",
+    innerHTML: "Player 2",
   });
   const playerTwoPairs = Object.assign(document.createElement("div"), {
     innerHTML: `Pairs: ${player_two_pairs}`,
@@ -179,6 +179,8 @@ const resetGame = () => {
   correctPairs = 0;
   whosTurn = "one";
   clickedCards = [];
+  player_one_pairs = 0;
+  player_two_pairs = 0;
 
   if (game_mode === "solo") {
     info.append(createSoloPlayerDiv());
@@ -226,20 +228,49 @@ const rotate = (index, value) => {
       if (game_mode === "solo") {
         updateMoves();
       }
+
       if (game_mode === "two") {
         if (whosTurn === "one") {
           whosTurn = "two";
           console.log(whosTurn);
+          document.querySelector(".player-one").classList.remove("turn");
+          document.querySelector(".player-two").classList.add("turn");
         } else if (whosTurn === "two") {
           whosTurn = "one";
+          document.querySelector(".player-two").classList.remove("turn");
+          document.querySelector(".player-one").classList.add("turn");
           console.log(whosTurn);
         }
       }
     }
   }
+
   cardsList[index].children[0].classList.add("rotate");
   cardsList[index].onclick = () => {};
   clickedCards.push({ index, value });
+
+  // if (clickedCards.length === 2) {
+  //   if (clickedCards[0].value !== clickedCards[1].value) {
+  //     if (game_mode === "solo") {
+  //       updateMoves();
+  //     }
+
+  //     if (game_mode === "two") {
+  //       if (whosTurn === "one") {
+  //         whosTurn = "two";
+  //         console.log(whosTurn);
+  //         document.querySelector(".player-one").classList.remove("turn");
+  //         document.querySelector(".player-two").classList.add("turn");
+  //       } else if (whosTurn === "two") {
+  //         whosTurn = "one";
+  //         document.querySelector(".player-two").classList.remove("turn");
+  //         document.querySelector(".player-one").classList.add("turn");
+  //         console.log(whosTurn);
+  //       }
+  //     }
+  //   }
+  // }
+
   if (clickedCards.length == 2) {
     // Both flipped cards match
     if (clickedCards[0].value === clickedCards[1].value) {
@@ -247,11 +278,49 @@ const rotate = (index, value) => {
       if (game_mode === "solo") {
         updateMoves();
         correctPairs++;
-        if (correctPairs === 8) {
-          setTimeout(() => {
-            alert(`You win with ${moves} moves!`);
-          }, 500);
+        // if (correctPairs === 8) {
+        //   setTimeout(() => {
+        //     alert(`You win with ${moves} moves!`);
+        //   }, 500);
+        // }
+      }
+
+      if (game_mode === "two") {
+        if (whosTurn === "one") {
+          player_one_pairs++;
+          correctPairs++;
+          info.innerHTML = "";
+          info.append(createTwoPlayerDiv());
+        } else if (whosTurn === "two") {
+          player_two_pairs++;
+          correctPairs++;
+          info.innerHTML = "";
+          info.append(createTwoPlayerDiv());
         }
+      }
+    }
+  }
+
+  if (correctPairs === 8) {
+    if (game_mode === "solo") {
+      setTimeout(() => {
+        alert(`You win with ${moves} moves!`);
+      }, 500);
+    }
+
+    if (game_mode === "two") {
+      if (player_one_pairs > player_two_pairs) {
+        setTimeout(() => {
+          alert(`Player 1 wins with ${player_one_pairs} moves!`);
+        }, 500);
+      } else if (player_two_pairs > player_one_pairs) {
+        setTimeout(() => {
+          alert(`Player 2 wins with ${player_two_pairs} moves!`);
+        }, 500);
+      } else if (player_one_pairs === player_two_pairs) {
+        setTimeout(() => {
+          alert(`Tie game with ${player_one_pairs} each!`);
+        }, 500);
       }
     }
   }
