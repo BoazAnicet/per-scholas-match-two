@@ -1,16 +1,94 @@
 let arr = [];
-let player_one_score = 0;
-let player_two_score = 0;
+let player_one_pairs = 0;
+let player_two_pairs = 0;
 let moves = 0;
+let game_mode = "solo";
+let canClickCards = true;
+let grid = { length: 4, width: 3 };
+let cardsList;
+// let player_one_score = Object.assign(document.createElement("div"), {
+//   className: "player-info",
+//   innerHTML: `<h2>Player 1</h2><div>Pairs: ${player_one_pairs}</div>`,
+// });
+// let player_two_score = Object.assign(document.createElement("div"), {
+//   className: "player-info",
+//   innerHTML: `<h2>Player 2</h2><div>Pairs: ${player_two_pairs}</div>`,
+// });
+let info = document.getElementById("info");
+
 const updateMoves = () => {
   moves++;
   document.getElementById("moves").innerHTML = `Moves: ${moves}`;
 };
-let game_mode = "one";
-let canClickCards = true;
-let grid = { length: 4, width: 3 };
 
-let cardsList;
+const createSoloPlayerDiv = () => {
+  const soloPlayer = Object.assign(document.createElement("div"), {
+    className: "solo",
+  });
+
+  const movesDiv = Object.assign(document.createElement("div"), {
+    id: "solo",
+    innerHTML: `Moves: ${moves}`,
+  });
+
+  soloPlayer.append(movesDiv);
+
+  return soloPlayer;
+};
+
+const createTwoPlayerDiv = () => {
+  const twoPlayerDiv = Object.assign(document.createElement("div"), {
+    className: "two-player",
+  });
+
+  const playerOne = Object.assign(document.createElement("div"), {
+    className: "player-one",
+  });
+  const playerOneTitle = Object.assign(document.createElement("h2"), {
+    innerHTML: "Player 1",
+  });
+  const playerOnePairs = Object.assign(document.createElement("div"), {
+    innerHTML: `Pairs: ${player_one_pairs}`,
+  });
+
+  const playerTwo = Object.assign(document.createElement("div"), {
+    className: "player-two",
+  });
+  const playerTwoTitle = Object.assign(document.createElement("h2"), {
+    innerHTML: "Player 1",
+  });
+  const playerTwoPairs = Object.assign(document.createElement("div"), {
+    innerHTML: `Pairs: ${player_two_pairs}`,
+  });
+
+  playerOne.append(playerOneTitle);
+  playerOne.append(playerOnePairs);
+
+  playerTwo.append(playerTwoTitle);
+  playerTwo.append(playerTwoPairs);
+
+  twoPlayerDiv.append(playerOne);
+  twoPlayerDiv.append(playerTwo);
+
+  return twoPlayerDiv;
+};
+
+const changeGameMode = (mode) => {
+  info.innerHTML = "";
+  switch (mode) {
+    case "solo":
+      game_mode = "solo";
+      info.append(createSoloPlayerDiv());
+      break;
+    case "two":
+      game_mode = "two";
+      // resetGame();
+      info.append(createTwoPlayerDiv());
+      break;
+    default:
+      game_mode = "solo";
+  }
+};
 
 const cardBacks = [
   "/images/card-backs/endless-constellation.svg",
@@ -98,7 +176,17 @@ const resetGame = () => {
   renderCards();
   cardsList = document.querySelectorAll(".flip-card");
   moves = 0;
-  document.getElementById("moves").innerHTML = `Moves: ${moves}`;
+
+  // let
+
+  info.innerHTML = "";
+  if (game_mode === "solo") {
+    info.append(createSoloPlayerDiv());
+  } else if (game_mode === "two") {
+    info.append(createTwoPlayerDiv());
+  }
+
+  // document.getElementById("info").innerHTML = `Moves: ${moves}`;
 };
 
 const setGrid = (length, width) => {
