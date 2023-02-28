@@ -131,22 +131,16 @@ const createCard = (index, value, image) => {
   // Front
   const flipCardFront = Object.assign(document.createElement("div"), {
     className: "flip-card-front",
-    // innerHTML: "F",
-    style: `background-image: url(${cardBacks[4]})`,
+    style: `background-image: url(${cardBacks[2]})`,
   });
 
   // Back
   const flipCardBack = Object.assign(document.createElement("div"), {
     className: "flip-card-back",
-    // innerHTML: value,
-    // innerHTML: "B",
   });
   // Back image
   const flipCardBackImage = Object.assign(document.createElement("img"), {
-    // className: "flip-card-back",
-    // innerHTML: value,
     src: `${image}`,
-    // innerHTML: "B",
   });
   // Append Image
   flipCardBack.append(flipCardBackImage);
